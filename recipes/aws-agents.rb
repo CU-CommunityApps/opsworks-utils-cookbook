@@ -75,3 +75,7 @@ log 'Setting up cloudwatch alarm: swap utilization' do
   notifies :create, 'aws_cloudwatch[swap-utilization-alarm]', :immediately
 end
 
+log 'Setting up cloudwatch alarm: status check failed' do
+  notifies :create, 'aws_cloudwatch[status-check-alarm]', :immediately
+end
+

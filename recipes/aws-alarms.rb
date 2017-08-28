@@ -46,3 +46,17 @@ aws_cloudwatch 'swap-utilization-alarm' do
   alarm_actions node['alarms']['notify_sns_topic_arns']
 end
 
+aws_cloudwatch 'status-check-alarm' do
+  alarm_name "#{stack['name']}-#{instance['hostname']}-status-check-alarm".gsub(' ', '-')
+  period 60
+  evaluation_periods 1
+  threshold 1
+  comparison_operator 'GreaterThanOrEqualToThreshold'
+  metric_name 'StatusCheckFailed'
+  namespace 'AWS/EC2'
+  statistic 'Maximum'
+  dimensions [{ :name => 'InstanceId', :value => instance['ec2_instance_id'] }]
+  action :nothing
+  actions_enabled true
+  alarm_actions node['alarms']['notify_sns_topic_arns']
+end
