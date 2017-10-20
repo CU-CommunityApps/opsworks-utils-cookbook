@@ -38,10 +38,24 @@ end
 # Packages for custom metrics monitoring
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html#mon-scripts-getstarted
 
-package 'perl-Switch'
-package 'perl-DateTime'
-package 'perl-Sys-Syslog'
-package 'perl-LWP-Protocol-https'
+# Make sure there is enough swap space so Oracle doesn't complain
+if node[:platform_family].include?("rhel") 
+
+  package 'perl-DateTime'
+  package 'perl-CPAN'
+  package 'perl-Net-SSLeay'
+  package 'perl-IO-Socket-SSL'
+  package 'perl-Digest-SHA'
+  package 'gcc'
+  package 'zip'
+  package 'unzip'
+
+else
+  package 'perl-Switch'
+  package 'perl-DateTime'
+  package 'perl-Sys-Syslog'
+  package 'perl-LWP-Protocol-https'
+end
 
 execute 'install-metrics-script' do
   user 'root'
@@ -78,4 +92,3 @@ end
 log 'Setting up cloudwatch alarm: status check failed' do
   notifies :create, 'aws_cloudwatch[status-check-alarm]', :immediately
 end
-
