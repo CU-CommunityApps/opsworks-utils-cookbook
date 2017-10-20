@@ -37,10 +37,7 @@ end
 
 # Packages for custom metrics monitoring
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html#mon-scripts-getstarted
-
-# Make sure there is enough swap space so Oracle doesn't complain
-if node[:platform_family].include?("rhel") 
-
+if node[:platform_family].include?("rhel")
   package 'perl-DateTime'
   package 'perl-CPAN'
   package 'perl-Net-SSLeay'
@@ -49,7 +46,6 @@ if node[:platform_family].include?("rhel")
   package 'gcc'
   package 'zip'
   package 'unzip'
-
 else
   package 'perl-Switch'
   package 'perl-DateTime'
