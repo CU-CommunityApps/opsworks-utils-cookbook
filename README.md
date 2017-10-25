@@ -2,6 +2,12 @@
 
 Standard, shared recipes for use in OpsWorks.
 
+### Recipes support Amazon Linux and RedHat
+
+Logic has specific testing for platform "redhat" and installs custom packages for redhat. 
+
+
+
 ## Custom JSON - Papetrail setup for (recipe - papertrail.rb ) 
 
 You need to configure the exact Papertrail target using OpsWorks custom JSON.
@@ -27,8 +33,3 @@ You need to configure the exact Papertrail target using OpsWorks custom JSON.
   }
 }
 ```
-
-## Recipes support Amazon Linux and RedHat
-
-Logic has specific testing for platform "redhat" and installs custom packages for redhat. 
-
