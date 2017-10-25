@@ -1,10 +1,10 @@
 # opsworks-utils-cookbook
 
-Standard, shared recipes for use in OpsWorks.
+   Standard, shared recipes for use in OpsWorks.
 
-### Recipes support Amazon Linux and RedHat
+  ### Recipes support Amazon Linux and RedHat
 
-Logic has specific testing for platform "redhat" and installs custom packages for redhat. 
+     Logic has specific testing for platform "redhat" and installs custom packages for redhat. 
 
 
 
