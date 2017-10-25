@@ -37,7 +37,8 @@ end
 
 # Packages for custom metrics monitoring
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html#mon-scripts-getstarted
-#if node[:platform_family].include?("rhel")
+
+if node[:platform].include?("redhat")
   package 'perl-DateTime'
   package 'perl-CPAN'
   package 'perl-Net-SSLeay'
@@ -46,12 +47,12 @@ end
   package 'gcc'
   package 'zip'
   package 'unzip'
-#else
-#  package 'perl-Switch'
-#  package 'perl-DateTime'
-#  package 'perl-Sys-Syslog'
-#  package 'perl-LWP-Protocol-https'
-#end
+else
+  package 'perl-Switch'
+  package 'perl-DateTime'
+  package 'perl-Sys-Syslog'
+  package 'perl-LWP-Protocol-https'
+end
 
 execute 'install-metrics-script' do
   user 'root'
