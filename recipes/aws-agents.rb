@@ -4,14 +4,64 @@ instance = search('aws_opsworks_instance', 'self:true').first
 
 ### SSM Agent
 
-remote_file "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm" do
-  source "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+case node[:platform]
+when "amazon"
+  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+  ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+when "redhat"
+  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+  ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+when "ubuntu"
+  ssmagent_remote_file = "amazon-ssm-agent.deb"
+  ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/debian_amd64/amazon-ssm-agent.deb"
+when "suse"
+  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+  ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+else
+  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+  ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+end
+
+remote_file "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}" do
+  source "#{ssmagent_source}"
   action :create_if_missing
 end
 
-rpm_package 'ssm-agent' do
-  source "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm"
+#remote_file "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm" do
+#  source "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
+#  action :create_if_missing
+#end
+
+case node[:platform]
+when "amazon"
+  rpm_package 'ssm-agent' do
+    source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+  end
+when "redhat"
+  rpm_package 'ssm-agent' do
+    source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+  end
+when "ubuntu"
+  dpkg_package 'ssm-agent' do
+    source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+  end
+when "suse"
+  zypper_package 'ssm-agent' do
+    source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+  end
+else
+  rpm_package 'ssm-agent' do
+    source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+  end
 end
+
+#rpm_package 'ssm-agent' do
+#  source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+#end
+
+#rpm_package 'ssm-agent' do
+#  source "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm"
+#end
 
 ### AWS Inspector Agent
 
@@ -37,8 +87,14 @@ end
 
 # Packages for custom metrics monitoring
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html#mon-scripts-getstarted
-
-if node[:platform].include?("redhat")
+# http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html
+case node[:platform]
+when "amazon"
+  package 'perl-Switch'
+  package 'perl-DateTime'
+  package 'perl-Sys-Syslog'
+  package 'perl-LWP-Protocol-https'
+when "redhat"
   package 'perl-DateTime'
   package 'perl-CPAN'
   package 'perl-Net-SSLeay'
@@ -47,6 +103,14 @@ if node[:platform].include?("redhat")
   package 'gcc'
   package 'zip'
   package 'unzip'
+when "ubuntu"
+  package 'unzip'
+  package 'libwww-perl'
+  package 'libdatetime-perl'
+when "suse"
+  package 'perl-Switch'
+  package 'perl-DateTime'
+  package 'perl-LWP-Protocol-https'
 else
   package 'perl-Switch'
   package 'perl-DateTime'
