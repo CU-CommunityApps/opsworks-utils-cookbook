@@ -10,7 +10,7 @@ module OpsWorksUtilsKMSDecrypt
   # - attributes to be decrypted:
   #   - must have a key with suffix "_encrypted". E.g., my_data_encrypted.
   #   - the decrypted value is stored in an atttribute with the original
-  #     key having the suffix removed. E.g., my_data
+  #     key and having the suffix "_decrypted". E.g., my_data_decrypted
   # - the decrypted values are merged into the node.default chef object.
   #
   # Call like this from a OpsWorks Chef recipe:
