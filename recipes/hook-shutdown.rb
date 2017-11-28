@@ -5,11 +5,11 @@ log "Host #{instance['hostname']} caught a SHUTDOWN event."
 include_recipe 'opsworks-utils-cookbook::aws-alarms'
 
 log 'Removing cloudwatch alarm: disk space' do
-  notifies :create, 'aws_cloudwatch[disk-space-alarm]', :immediately
+  notifies :delete, 'aws_cloudwatch[disk-space-alarm]', :immediately
 end
 
 log 'Removing cloudwatch alarm: memory utilization' do
-  notifies :create, 'aws_cloudwatch[memory-utilization-alarm]', :immediately
+  notifies :delete, 'aws_cloudwatch[memory-utilization-alarm]', :immediately
 end
 
 log 'Removing cloudwatch alarm: swap utilization' do
