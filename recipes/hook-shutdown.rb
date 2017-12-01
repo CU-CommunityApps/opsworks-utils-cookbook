@@ -2,7 +2,7 @@ instance = search('aws_opsworks_instance', 'self:true').first
 log "Host #{instance['hostname']} caught a SHUTDOWN event."
 
 #### ALARMS ####
-include_recipe 'opsworks-utils-cookbook::aws-alarms'
+include_recipe 'opsworks-utils-cookbook::aws-alarms-definition'
 
 log 'Removing cloudwatch alarm: disk space' do
   notifies :delete, 'aws_cloudwatch[disk-space-alarm]', :immediately
