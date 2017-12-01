@@ -14,7 +14,7 @@ aws_cloudwatch 'disk-space-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if node['opsworks-utils']['alarms']['disk-space-alarm']['enabled']
+  only_if { node['opsworks-utils']['alarms']['disk-space-alarm']['enabled'] }
 end
 
 aws_cloudwatch 'memory-utilization-alarm' do
@@ -30,7 +30,7 @@ aws_cloudwatch 'memory-utilization-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if node['opsworks-utils']['alarms']['memory-utilization-alarm']['enabled']
+  only_if { node['opsworks-utils']['alarms']['memory-utilization-alarm']['enabled'] }
 end
 
 aws_cloudwatch 'swap-utilization-alarm' do
@@ -46,7 +46,7 @@ aws_cloudwatch 'swap-utilization-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if node['opsworks-utils']['alarms']['swap-utilization-alarm']['enabled']
+  only_if { node['opsworks-utils']['alarms']['swap-utilization-alarm']['enabled'] }
 end
 
 aws_cloudwatch 'status-check-alarm' do
@@ -62,7 +62,7 @@ aws_cloudwatch 'status-check-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if node['opsworks-utils']['alarms']['status-check-alarm']['enabled']
+  only_if { node['opsworks-utils']['alarms']['status-check-alarm']['enabled'] }
 end
 
 t2_credits_map = { "t2.nano" => 3,
@@ -86,5 +86,5 @@ aws_cloudwatch 'cpu-credits-balance-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if instance['instance_type'].start_with?('t2') && node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['enabled']
+  only_if { instance['instance_type'].start_with?('t2') && node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['enabled'] }
 end
