@@ -62,7 +62,7 @@ aws_cloudwatch 'status-check-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if { node['opsworks-utils']['alarms']['status-check-alarm']['enabled'] == 'true' }
+  only_if { node['opsworks-utils']['alarms']['status-check-alarm']['enabled'] }
 end
 
 t2_credits_map = { "t2.nano" => 3,
@@ -74,7 +74,6 @@ t2_credits_map = { "t2.nano" => 3,
                   "t2.2xlarge" => 81 }
 
 log "instance_type: #{instance['instance_type']}"
-log "instance_type t2? #{instance['instance_type'].start_with?('t2')}"
 
 aws_cloudwatch 'cpu-credits-balance-alarm' do
   alarm_name          "#{stack['name']}-#{instance['hostname']}-cpu-credits-balance-alarm".gsub(' ', '-')
