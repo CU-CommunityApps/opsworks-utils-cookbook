@@ -62,7 +62,7 @@ aws_cloudwatch 'status-check-alarm' do
   action :nothing
   actions_enabled true
   alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if { node['opsworks-utils']['alarms']['status-check-alarm']['enabled'] }
+  only_if { node['opsworks-utils']['alarms']['status-check-alarm']['enabled'] == 'true' }
 end
 
 t2_credits_map = { "t2.nano" => 3,
