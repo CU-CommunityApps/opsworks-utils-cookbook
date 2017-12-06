@@ -20,3 +20,7 @@ end
 log 'Setting up cloudwatch alarm: cpu credits balance alarm' do
   notifies :create, 'aws_cloudwatch[cpu-credits-balance-alarm]', :immediately
 end
+
+log 'Setting up cloudwatch alarm: cpu utilization' do
+  notifies :create, 'aws_cloudwatch[cpu-utilization-alarm]', :immediately
+end

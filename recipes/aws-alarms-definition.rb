@@ -92,3 +92,19 @@ aws_cloudwatch 'cpu-credits-balance-alarm' do
   alarm_actions node['alarms']['notify_sns_topic_arns']
   only_if { instance['instance_type'].start_with?('t2') && node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['enabled'] }
 end
+
+aws_cloudwatch 'cpu-utilization-alarm' do
+  alarm_name          "#{stack['name']}-#{instance['hostname']}-cpu-utilization-alarm".tr(' ', '-')
+  period              node['opsworks-utils']['alarms']['cpu-utilization-alarm']['period']
+  evaluation_periods  node['opsworks-utils']['alarms']['cpu-utilization-alarm']['evaluation_periods']
+  threshold           node['opsworks-utils']['alarms']['cpu-utilization-alarm']['threshold']
+  statistic           node['opsworks-utils']['alarms']['cpu-utilization-alarm']['statistic']
+  comparison_operator 'GreaterThanThreshold'
+  metric_name         'CPUUtilization'
+  namespace           'AWS/EC2'
+  dimensions [{ name: 'InstanceId', value: instance['ec2_instance_id'] }]
+  action :nothing
+  actions_enabled true
+  alarm_actions node['alarms']['notify_sns_topic_arns']
+  only_if { node['opsworks-utils']['alarms']['cpu-utilization-alarm']['enabled'] }
+end

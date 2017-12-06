@@ -24,6 +24,10 @@ log 'Removing cloudwatch alarm: cpu credits balance alarm' do
   notifies :delete, 'aws_cloudwatch[cpu-credits-balance-alarm]', :immediately
 end
 
+log 'Removing cloudwatch alarm: cpu utilization' do
+  notifies :delete, 'aws_cloudwatch[cpu-utilization-alarm]', :immediately
+end
+
 #### ROUTE53 ####
 include_recipe 'opsworks-utils-cookbook::dns'
 
