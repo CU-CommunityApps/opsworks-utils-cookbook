@@ -31,3 +31,9 @@ default['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['evaluation_per
 default['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['threshold_hourly_credits_multiplier'] = 0.10
 default['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['statistic'] = 'Average'
 default['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['enabled'] = true
+
+default['opsworks-utils']['alarms']['cpu-utilization-alarm']['period'] = 600
+default['opsworks-utils']['alarms']['cpu-utilization-alarm']['evaluation_periods'] = 2
+default['opsworks-utils']['alarms']['cpu-utilization-alarm']['threshold'] = 80
+default['opsworks-utils']['alarms']['cpu-utilization-alarm']['statistic'] = 'Average'
+default['opsworks-utils']['alarms']['cpu-utilization-alarm']['enabled'] = true
