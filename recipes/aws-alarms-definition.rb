@@ -74,12 +74,13 @@ t2_credits_map = { "t2.nano" => 3,
                   "t2.2xlarge" => 81 }
 
 log "instance_type: #{instance['instance_type']}"
+t2_credits_value = instance['instance_type'].nil? 0 : t2_credits_map[instance['instance_type']]
 
 aws_cloudwatch 'cpu-credits-balance-alarm' do
   alarm_name          "#{stack['name']}-#{instance['hostname']}-cpu-credits-balance-alarm".gsub(' ', '-')
   period              node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['period']
   evaluation_periods  node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['evaluation_periods']
-  threshold           (node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['threshold_hourly_credits_multiplier'] * t2_credits_map[instance['instance_type']]).round
+  threshold           (node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['threshold_hourly_credits_multiplier'] * t2_credits_value).round
   statistic           node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['statistic']
   comparison_operator 'LessThanOrEqualToThreshold'
   metric_name         'CPUCreditBalance'
