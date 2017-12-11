@@ -75,8 +75,6 @@ t2_credits_map = { 't2.nano' => 3,
 # Set the default value for non-existant keys
 t2_credits_map.default = 0
 
-log "instance_type: #{instance['instance_type']} credits: #{t2_credits_map[instance['instance_type']]}"
-
 aws_cloudwatch 'cpu-credits-balance-alarm' do
   alarm_name          "#{stack['name']}-#{instance['hostname']}-cpu-credits-balance-alarm".tr(' ', '-')
   period              node['opsworks-utils']['alarms']['cpu-credits-balance-alarm']['period']

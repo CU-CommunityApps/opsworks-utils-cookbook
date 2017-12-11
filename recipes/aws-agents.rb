@@ -36,22 +36,27 @@ case node[:platform]
 when "amazon"
   rpm_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+    not_if 'rpm -qa | grep ssm'
   end
 when "redhat"
   rpm_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+    not_if 'rpm -qa | grep ssm'
   end
 when "ubuntu"
   dpkg_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+    not_if "dpkg -s ssm"
   end
 when "suse"
   zypper_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+    not_if 'rpm -qa | grep ssm'
   end
 else
   rpm_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
+    not_if 'rpm -qa | grep ssm'
   end
 end
 
