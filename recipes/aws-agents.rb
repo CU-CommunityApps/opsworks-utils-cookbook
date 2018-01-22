@@ -101,11 +101,13 @@ when "amazon"
   package 'perl-LWP-Protocol-https'
 when "redhat"
   if node[:platform_version] == '7.4'
-      package 'perl-Switch'
+      package 'perl-Switch' do
+        options '--enablerepo=rhui-REGION-rhel-server-optional'
+      end
       package 'perl-DateTime'
       package 'perl-Sys-Syslog'
       package 'perl-LWP-Protocol-https'
-      package 'perl-Digest-SHA --enablerepo="rhui-REGION-rhel-server-optional"'
+      package 'perl-Digest-SHA'
     else
       package 'perl-DateTime'
       package 'perl-CPAN'
