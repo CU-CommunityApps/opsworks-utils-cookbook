@@ -108,6 +108,8 @@ when "redhat"
       package 'perl-Sys-Syslog'
       package 'perl-LWP-Protocol-https'
       package 'perl-Digest-SHA'
+      package 'zip'
+      package 'unzip'
     else
       package 'perl-DateTime'
       package 'perl-CPAN'
