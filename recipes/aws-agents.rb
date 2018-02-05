@@ -100,7 +100,7 @@ when "amazon"
   package 'perl-Sys-Syslog'
   package 'perl-LWP-Protocol-https'
 when "redhat"
-  if node[:platform_version] == '7.4'
+  if node[:platform_version].start_with?('7.')
       package 'perl-Switch' do
         options '--enablerepo=rhui-REGION-rhel-server-optional'
       end
