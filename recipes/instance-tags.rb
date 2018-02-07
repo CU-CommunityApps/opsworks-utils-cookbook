@@ -30,3 +30,14 @@ node['instance-tags'].each do |tag|
     action :update
   end
 end
+
+# Tag instances with OpsWorks instance ID and stack ID
+
+instance = search('aws_opsworks_instance', 'self:true').first
+stack = search('aws_opsworks_stack').first
+
+aws_resource_tag 'opsworks-tags' do
+  tags ({ 'opsworks-instance-id' => instance['instance_id'],
+          'opsworks-stack-id' => stack['stack_id'] })
+  resource_id node['ec2']['instance_id']
+end
