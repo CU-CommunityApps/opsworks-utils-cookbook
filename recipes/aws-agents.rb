@@ -149,7 +149,7 @@ end
 cron 'custom-metrics-cron' do
   user 'root'
   minute '*/5'
-  command '/root/aws-scripts-mon/mon-put-instance-data.pl --mem-util --swap-util --disk-space-util --disk-path=/'
+  command '/root/aws-scripts-mon/mon-put-instance-data.pl --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron'
 end
 
 #### ALARMS
