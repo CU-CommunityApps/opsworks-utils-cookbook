@@ -4,7 +4,7 @@ instance = search('aws_opsworks_instance', 'self:true').first
 node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |filesystem|
   safe_filesystem = filesystem.tr('/ ', '%-')
   aws_cloudwatch "disk-space-alarm-#{safe_filesystem}" do
-    alarm_name          "#{stack['name']}-#{instance['hostname']}-disk-space-alarm".tr(' ', '-')
+    alarm_name          "#{stack['name']}-#{instance['hostname']}-disk-space-alarm-#{safe_filesystem}".tr(' ', '-')
     period              node['opsworks-utils']['alarms']['disk-space-alarm']['period']
     evaluation_periods  node['opsworks-utils']['alarms']['disk-space-alarm']['evaluation_periods']
     threshold           node['opsworks-utils']['alarms']['disk-space-alarm']['threshold']
