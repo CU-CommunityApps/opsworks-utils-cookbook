@@ -4,8 +4,11 @@ log "Host #{instance['hostname']} caught a SHUTDOWN event."
 #### ALARMS ####
 include_recipe 'opsworks-utils-cookbook::aws-alarms-definition'
 
-log 'Removing cloudwatch alarm: disk space' do
-  notifies :delete, 'aws_cloudwatch[disk-space-alarm]', :immediately
+node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |filesystem|
+  safe_filesystem = filesystem.tr('/ ', '%-')
+  log "Removing cloudwatch alarm: disk space for #{filesystem}" do
+    notifies :delete, "aws_cloudwatch[disk-space-alarm-#{safe_filesystem}]", :immediately
+  end
 end
 
 log 'Removing cloudwatch alarm: memory utilization' do
@@ -31,6 +34,6 @@ end
 #### ROUTE53 ####
 include_recipe 'opsworks-utils-cookbook::dns'
 
-log "Deleting DNS Record for instance from Route53" do
+log 'Deleting DNS Record for instance from Route53' do
   notifies :delete, 'route53_record[instance-dns-record]', :immediately
 end

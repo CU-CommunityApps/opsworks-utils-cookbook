@@ -1,20 +1,23 @@
 stack = search('aws_opsworks_stack').first
 instance = search('aws_opsworks_instance', 'self:true').first
 
-aws_cloudwatch 'disk-space-alarm' do
-  alarm_name          "#{stack['name']}-#{instance['hostname']}-disk-space-alarm".tr(' ', '-')
-  period              node['opsworks-utils']['alarms']['disk-space-alarm']['period']
-  evaluation_periods  node['opsworks-utils']['alarms']['disk-space-alarm']['evaluation_periods']
-  threshold           node['opsworks-utils']['alarms']['disk-space-alarm']['threshold']
-  statistic           node['opsworks-utils']['alarms']['disk-space-alarm']['statistic']
-  comparison_operator 'GreaterThanThreshold'
-  metric_name         'DiskSpaceUtilization'
-  namespace           'System/Linux'
-  dimensions [{ name: 'InstanceId', value: instance['ec2_instance_id'] }, { name: 'MountPath', value: '/' }, { name: 'Filesystem', value: '/dev/xvda1' }]
-  action :nothing
-  actions_enabled true
-  alarm_actions node['alarms']['notify_sns_topic_arns']
-  only_if { node['opsworks-utils']['alarms']['disk-space-alarm']['enabled'] }
+node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |filesystem|
+  safe_filesystem = filesystem.tr('/ ', '%-')
+  aws_cloudwatch "disk-space-alarm-#{safe_filesystem}" do
+    alarm_name          "#{stack['name']}-#{instance['hostname']}-disk-space-alarm".tr(' ', '-')
+    period              node['opsworks-utils']['alarms']['disk-space-alarm']['period']
+    evaluation_periods  node['opsworks-utils']['alarms']['disk-space-alarm']['evaluation_periods']
+    threshold           node['opsworks-utils']['alarms']['disk-space-alarm']['threshold']
+    statistic           node['opsworks-utils']['alarms']['disk-space-alarm']['statistic']
+    comparison_operator 'GreaterThanThreshold'
+    metric_name         'DiskSpaceUtilization'
+    namespace           'System/Linux'
+    dimensions [{ name: 'InstanceId', value: instance['ec2_instance_id'] }, { name: 'MountPath', value: filesystem }, { name: 'Filesystem', value: node['filesystem2']['by_mountpoint'][filesystem]['devices'].first }]
+    action :nothing
+    actions_enabled true
+    alarm_actions node['alarms']['notify_sns_topic_arns']
+    only_if { node['opsworks-utils']['alarms']['disk-space-alarm']['enabled'] }
+  end
 end
 
 aws_cloudwatch 'memory-utilization-alarm' do

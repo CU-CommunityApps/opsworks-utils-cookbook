@@ -1,4 +1,6 @@
-
+# Override this with all the mount points of all the separate file systems
+# you want to monitor. E.g., ['/', '/oracle']
+default['opsworks-utils']['alarms']['disk-space-alarm']['targets'] = [ '/' ]
 
 default['opsworks-utils']['alarms']['disk-space-alarm']['period'] = 300
 default['opsworks-utils']['alarms']['disk-space-alarm']['evaluation_periods'] = 2

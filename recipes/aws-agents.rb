@@ -146,27 +146,15 @@ execute 'install-metrics-script' do
   not_if { ::File.exist?('/root/aws-scripts-mon/mon-put-instance-data.pl') }
 end
 
+disks = ''
+node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |t|
+  disks += ' --disk-path=' + t
+end
+
+log "disk paths: #{disks}"
+
 cron 'custom-metrics-cron' do
   user 'root'
   minute '*/5'
-  command '/root/aws-scripts-mon/mon-put-instance-data.pl --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron'
-end
-
-#### ALARMS
-include_recipe 'opsworks-utils-cookbook::aws-alarms'
-
-log 'Setting up cloudwatch alarm: disk space' do
-  notifies :create, 'aws_cloudwatch[disk-space-alarm]', :immediately
-end
-
-log 'Setting up cloudwatch alarm: memory utilization' do
-  notifies :create, 'aws_cloudwatch[memory-utilization-alarm]', :immediately
-end
-
-log 'Setting up cloudwatch alarm: swap utilization' do
-  notifies :create, 'aws_cloudwatch[swap-utilization-alarm]', :immediately
-end
-
-log 'Setting up cloudwatch alarm: status check failed' do
-  notifies :create, 'aws_cloudwatch[status-check-alarm]', :immediately
+  command "/root/aws-scripts-mon/mon-put-instance-data.pl --mem-util --swap-util --disk-space-util #{disks} --from-cron"
 end

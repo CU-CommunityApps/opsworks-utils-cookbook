@@ -1,8 +1,11 @@
 #### ALARMS
 include_recipe 'opsworks-utils-cookbook::aws-alarms-definition'
 
-log 'Setting up cloudwatch alarm: disk space' do
-  notifies :create, 'aws_cloudwatch[disk-space-alarm]', :immediately
+node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |filesystem|
+  safe_filesystem = filesystem.tr('/ ', '%-')
+  log "Setting up cloudwatch alarm: disk space  for #{filesystem}" do
+    notifies :create, "aws_cloudwatch[disk-space-alarm-#{safe_filesystem}]", :immediately
+  end
 end
 
 log 'Setting up cloudwatch alarm: memory utilization' do
