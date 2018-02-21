@@ -151,8 +151,6 @@ node['opsworks-utils']['alarms']['disk-space-alarm']['targets'].each do |t|
   disks += ' --disk-path=' + t
 end
 
-log "disk paths: #{disks}"
-
 cron 'custom-metrics-cron' do
   user 'root'
   minute '*/5'
