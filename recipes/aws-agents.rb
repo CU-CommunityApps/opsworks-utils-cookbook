@@ -120,6 +120,14 @@ when "redhat"
       package 'zip'
       package 'unzip'
     end
+when "centos"
+    package 'perl-Switch'
+    package 'perl-DateTime'
+    package 'perl-Sys-Syslog'
+    package 'perl-LWP-Protocol-https'
+    package 'perl-Digest-SHA'
+    package 'zip'
+    package 'unzip'
 when "ubuntu"
   package 'unzip'
   package 'libwww-perl'
