@@ -1,35 +1,30 @@
 # opsworks-utils-cookbook
 
-   Standard, shared recipes for use in OpsWorks.
+Standard, shared recipes for use in OpsWorks.
 
-  ### Recipes support Amazon Linux and RedHat
+These recipes have been tested/used on the following linux distributions:
+* Amazon Linux
+* RedHat 7
+* Centos 7
 
-     Logic has specific testing for platform "redhat" and installs custom packages for redhat. 
+## Configuration
 
+### Papertrail
 
+Recipe: papertrail
 
-## Custom JSON - Papetrail setup for (recipe - papertrail.rb ) 
-
-You need to configure the exact Papertrail target using OpsWorks custom JSON.
+You need to configure the exact Papertrail target using OpsWorks custom JSON. Replace `logsXXX.papertrailapp.com` and `1234` with values for your Papertrail account.
 
 ```json
 {
-  "remote_syslog2" : {
-    "config" : {
-      "files" : [
-        "/var/chef/runs/**/chef.log",
-        "/var/log/sssd/*.log",
-        "/var/log/syslog",
-        "/var/log/auth.log"
-      ],
-      "exclude_files" : [],
-      "exclude_patterns" : [],
-      "destination" : {
-        "host" : "logsXXX.papertrailapp.com",
-        "port" : 12345,
-        "protocol" : "tls"
-      }
-    }
+  "papertrail": {
+    "files": [
+        "/var/log/cloud-init.log",
+        "/var/log/yum.log"
+    ],
+    "host": "logsXXX.papertrailapp.com",
+    "port": "1234",
+    "protocol": "tls"
   }
 }
 ```
