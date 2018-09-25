@@ -1,54 +1,50 @@
 stack = search('aws_opsworks_stack').first
 region = stack['region']
-instance = search('aws_opsworks_instance', 'self:true').first
+# instance = search('aws_opsworks_instance', 'self:true').first
 
 ### SSM Agent
 
 case node[:platform]
-when "amazon"
-  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+when 'amazon'
+  ssmagent_remote_file = 'amazon-ssm-agent.rpm'
   ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
-when "redhat"
-  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+when 'redhat'
+  ssmagent_remote_file = 'amazon-ssm-agent.rpm'
   ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
-when "ubuntu"
-  ssmagent_remote_file = "amazon-ssm-agent.deb"
+when 'ubuntu'
+  ssmagent_remote_file = 'amazon-ssm-agent.deb'
   ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/debian_amd64/amazon-ssm-agent.deb"
-when "suse"
-  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+when 'suse'
+  ssmagent_remote_file = 'amazon-ssm-agent.rpm'
   ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
 else
-  ssmagent_remote_file = "amazon-ssm-agent.rpm"
+  ssmagent_remote_file = 'amazon-ssm-agent.rpm'
   ssmagent_source = "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}" do
-  source "#{ssmagent_source}"
+  source ssmagent_source
   action :create_if_missing
 end
 
-#remote_file "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm" do
-#  source "https://amazon-ssm-#{region}.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm"
-#  action :create_if_missing
-#end
-
 case node[:platform]
-when "amazon"
+when 'amazon'
   rpm_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
     not_if 'rpm -qa | grep ssm'
   end
-when "redhat"
+when 'redhat'
   rpm_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
     not_if 'rpm -qa | grep ssm'
   end
-when "ubuntu"
+when 'ubuntu'
   dpkg_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
-    not_if "dpkg -s ssm"
+    not_if 'dpkg -s ssm'
+
   end
-when "suse"
+when 'suse'
   zypper_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
     not_if 'rpm -qa | grep ssm'
@@ -59,14 +55,6 @@ else
     not_if 'rpm -qa | grep ssm'
   end
 end
-
-#rpm_package 'ssm-agent' do
-#  source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
-#end
-
-#rpm_package 'ssm-agent' do
-#  source "#{Chef::Config[:file_cache_path]}/amazon-ssm-agent.rpm"
-#end
 
 ### AWS Inspector Agent
 
@@ -94,45 +82,41 @@ end
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html#mon-scripts-getstarted
 # http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html
 case node[:platform]
-when "amazon"
+when 'amazon'
   package 'perl-Switch'
   package 'perl-DateTime'
   package 'perl-Sys-Syslog'
   package 'perl-LWP-Protocol-https'
-when "redhat"
+when 'redhat'
+  package 'perl-DateTime'
+  package 'perl-Digest-SHA'
+  package 'zip'
+  package 'unzip'
   if node[:platform_version].start_with?('7.')
-      package 'perl-Switch' do
-        options '--enablerepo=rhui-REGION-rhel-server-optional'
-      end
-      package 'perl-DateTime'
-      package 'perl-Sys-Syslog'
-      package 'perl-LWP-Protocol-https'
-      package 'perl-Digest-SHA'
-      package 'zip'
-      package 'unzip'
-    else
-      package 'perl-DateTime'
-      package 'perl-CPAN'
-      package 'perl-Net-SSLeay'
-      package 'perl-IO-Socket-SSL'
-      package 'perl-Digest-SHA'
-      package 'gcc'
-      package 'zip'
-      package 'unzip'
+    package 'perl-Switch' do
+      options '--enablerepo=rhui-REGION-rhel-server-optional'
     end
-when "centos"
-    package 'perl-Switch'
-    package 'perl-DateTime'
     package 'perl-Sys-Syslog'
     package 'perl-LWP-Protocol-https'
-    package 'perl-Digest-SHA'
-    package 'zip'
-    package 'unzip'
-when "ubuntu"
+  else
+    package 'perl-CPAN'
+    package 'perl-Net-SSLeay'
+    package 'perl-IO-Socket-SSL'
+    package 'gcc'
+  end
+when 'centos'
+  package 'perl-Switch'
+  package 'perl-DateTime'
+  package 'perl-Sys-Syslog'
+  package 'perl-LWP-Protocol-https'
+  package 'perl-Digest-SHA'
+  package 'zip'
+  package 'unzip'
+when 'ubuntu'
   package 'unzip'
   package 'libwww-perl'
   package 'libdatetime-perl'
-when "suse"
+when 'suse'
   package 'perl-Switch'
   package 'perl-DateTime'
   package 'perl-LWP-Protocol-https'
