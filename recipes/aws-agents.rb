@@ -42,7 +42,9 @@ when 'ubuntu'
   dpkg_package 'ssm-agent' do
     source "#{Chef::Config[:file_cache_path]}/#{ssmagent_remote_file}"
     not_if 'dpkg -s ssm'
-
+    # short term fix for failures due to change in ssm installation on Ubuntu 16.04+
+    # https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html#agent-install-ubuntu-snap
+    ignore_failure true
   end
 when 'suse'
   zypper_package 'ssm-agent' do
