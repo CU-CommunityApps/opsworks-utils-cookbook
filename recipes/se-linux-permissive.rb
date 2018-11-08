@@ -1,3 +1,6 @@
+# This recipe sets SELINUX to "permissive" mode.
+# It is NOT run by default in hook-setup recipe.
+
 # See https://linuxize.com/post/how-to-disable-selinux-on-centos-7/
 
 # If setting SELINUX to permissive, one probably should start looking at
