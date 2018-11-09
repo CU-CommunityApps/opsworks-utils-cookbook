@@ -3,9 +3,9 @@ default['opsworks-utils']['set-cpu-limit'] = false
 # Default for t2 & t3 cpu credit limitations: standard or unlimited
 default['opsworks-utils']['cpu-limit'] = 'standard'
 
-# Should we try to fiddle with the SELINUX mode
+# Should we try to fiddle with the SELINUX mode?
 default['opsworks-utils']['selinux']['set-mode'] = false
-# SELINUX mode options: permissive, disabled, enabled
+# SELINUX mode options: permissive, disabled, enforcing
 default['opsworks-utils']['selinux']['mode'] = 'permissive'
 
 # Override this with all the mount points of all the separate file systems
