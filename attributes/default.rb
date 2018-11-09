@@ -1,6 +1,16 @@
+# Should we attempt to set the t2/t3 cpu-credit mode?
+default['opsworks-utils']['set-cpu-limit'] = false
+# Default for t2 & t3 cpu credit limitations: standard or unlimited
+default['opsworks-utils']['cpu-limit'] = 'standard'
+
+# Should we try to fiddle with the SELINUX mode?
+default['opsworks-utils']['selinux']['set-mode'] = false
+# SELINUX mode options: permissive, disabled, enforcing
+default['opsworks-utils']['selinux']['mode'] = 'permissive'
+
 # Override this with all the mount points of all the separate file systems
 # you want to monitor. E.g., ['/', '/oracle']
-default['opsworks-utils']['alarms']['disk-space-alarm']['targets'] = [ '/' ]
+default['opsworks-utils']['alarms']['disk-space-alarm']['targets'] = ['/']
 
 default['opsworks-utils']['alarms']['disk-space-alarm']['period'] = 300
 default['opsworks-utils']['alarms']['disk-space-alarm']['evaluation_periods'] = 2
