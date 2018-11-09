@@ -1,7 +1,10 @@
 # This recipe switches the running instances to limited CPU consumption
 # if it is a t2 or t3 instance type.
 
-# This recipe is NOT RUN by hook-setup.
+# See attributes/default.rb for defaults:
+# default['opsworks-utils']['set-cpu-limit'][*]
+# default['opsworks-utils']['cpu-limit'] = 'standard'
+
 
 # NOTE: The instance role requires the following IAM policy
 # {

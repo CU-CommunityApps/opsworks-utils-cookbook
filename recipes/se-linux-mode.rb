@@ -1,10 +1,11 @@
-# This recipe sets SELINUX to "permissive" mode.
-# It is NOT run by default in hook-setup recipe.
+# This recipe controls SELINUX mode. It is not smart,
+# so leave default['opsworks-utils']['selinux']['set-mode'] = false
+# if your OS doesn't support SELINUX.
+
+# See attributes/default.rb for defaults at
+# default['opsworks-utils']['selinux'][*]
 
 # See https://linuxize.com/post/how-to-disable-selinux-on-centos-7/
-
-# If setting SELINUX to permissive, one probably should start looking at
-# its logs in /var/log/audit
 
 ruby_block 'se-linux-permissive' do
   block do
