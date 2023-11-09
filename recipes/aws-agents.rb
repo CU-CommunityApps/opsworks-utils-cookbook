@@ -133,7 +133,7 @@ execute 'install-metrics-script' do
   user 'root'
   cwd '/root'
   command <<-EOH
-    curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O && \
+    curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O && \
     unzip -o CloudWatchMonitoringScripts-1.2.2.zip && \
     rm -f CloudWatchMonitoringScripts-1.2.2.zip
   EOH
