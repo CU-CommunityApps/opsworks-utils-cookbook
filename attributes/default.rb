@@ -49,3 +49,5 @@ default['opsworks-utils']['alarms']['cpu-utilization-alarm']['evaluation_periods
 default['opsworks-utils']['alarms']['cpu-utilization-alarm']['threshold'] = 80
 default['opsworks-utils']['alarms']['cpu-utilization-alarm']['statistic'] = 'Average'
 default['opsworks-utils']['alarms']['cpu-utilization-alarm']['enabled'] = true
+
+default['opsworks-utils']['gems']['aws-sdk-core']['verserion'] = '3.119.1'
